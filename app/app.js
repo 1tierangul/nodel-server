@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
+const userCtrl = require('./controllers/user');
+const photoCtrl = require('./controllers/photo');
 const config = require('./config');
 
 const app = express();
@@ -18,5 +20,8 @@ if (process.env.NODE_ENV !== 'production') {
         allowedHeaders: ['*'],
     }));
 }
+
+app.use('/api/user', userCtrl);
+app.use('/api/photo', photoCtrl);
 
 module.exports = app;

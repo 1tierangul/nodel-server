@@ -1,9 +1,9 @@
 const http = require('http');
 const app = require('./app');
-const db = require('./db');
+const initDB = require('./init-db');
 
 async function start() {
-    await db.authenticate();
+    await initDB();
 
     const server = http.createServer(app);
 
