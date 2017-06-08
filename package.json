@@ -1,0 +1,22 @@
+{
+  "name": "nodel-server",
+  "version": "1.0.0",
+  "description": "흑역사 인스타그램",
+  "main": "app/start.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "KWEB",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.3",
+    "dotenv": "^4.0.0",
+    "express": "^4.15.3",
+    "express-session": "^1.15.3",
+    "helmet": "^3.6.1",
+    "mysql2": "^1.3.3",
+    "sequelize": "^4.0.0"
+  }
+}
