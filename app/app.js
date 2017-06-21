@@ -16,8 +16,10 @@ app.use(express.static(config.paths.static));
 if (process.env.NODE_ENV !== 'production') {
     // Allow cross-origin resource sharing on development.
     app.use(cors({
+        origin: [`http://localhost:${config.PORT}`],
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
-        allowedHeaders: ['*'],
+        allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+        credentials: true,
     }));
 }
 
