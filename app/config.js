@@ -14,6 +14,8 @@ const config = {
     DB_HOST: process.env.DB_HOST || 'localhost',
     CRYPTO_ALOGORITHM: process.env.CRYPTO_ALOGORITHM,
     CRYPTO_SECRET: process.env.CRYPTO_SECRET,
+    REDIS_HOST: process.env.REDIS_HOST || 'localhost',
+    REDIS_PORT: process.env.REDIS_PORT || 6379,
     paths: {
         static: path.resolve(rootPath, 'static/'),
     },

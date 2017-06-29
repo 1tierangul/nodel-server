@@ -1,4 +1,3 @@
-const moment = require('moment');
 const Sequelize = require('sequelize');
 const db = require('../db');
 const cryptoExtra = require('../utils/crypto-extra');
@@ -22,9 +21,6 @@ const User = db.define('user', {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    token: {
-        type: Sequelize.STRING,
-    },
 }, {
     freezeTableName: true,
 });
@@ -33,15 +29,11 @@ const User = db.define('user', {
 User.createNew = async function createNew(info) {
     const passwordHash = await cryptoExtra.encrypt(info.password);
 
-    const user = await User.create({
+    return User.create({
         email: info.email,
         name: info.name,
         password: passwordHash,
     });
-
-    await user.makeToken();
-
-    return user;
 };
 
 User.isExists = async function isExists(email) {
@@ -54,13 +46,6 @@ User.findByEmail = async function findByEmail(email) {
 };
 
 Object.assign(User.prototype, {
-    isTokenExpired(decoded) {
-        const now = moment();
-
-        return moment(decoded.expireDate).isBefore(now)
-            || this.get('token') === null;
-    },
-
     comparePassword(password) {
         const decrypted = cryptoExtra.decrypt(this.get('password'));
         return decrypted === password;
@@ -73,24 +58,6 @@ Object.assign(User.prototype, {
             email: this.get('email'),
         };
     },
-
-    async makeToken() {
-        const data = this.getPublicData();
-        let token = '';
-
-        try {
-            token = await jwt.sign(data);
-            await this.update({ token });
-        } catch (err) {
-            console.error('Error while update token', err);
-        }
-
-        return token;
-    },
-
-    async removeToken() {
-        return this.update({ token: null });
-    }
 });
 
 module.exports = User;

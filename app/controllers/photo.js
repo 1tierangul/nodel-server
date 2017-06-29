@@ -73,8 +73,10 @@ router.post('/', ensureAuth, upload.single('img'), async (req, res) => {
     const context = req.body.context;
     const rHashTags = JSON.parse(req.body.hashTags);
 
+    const userId = req.session.userId;
+
     const photo = await Photo.create({
-        ownerId: req.user.id,
+        ownerId: userId,
         imgSrc: req.file.filename,
         context,
     });
@@ -96,7 +98,7 @@ router.post('/', ensureAuth, upload.single('img'), async (req, res) => {
         });
     }
 
-    const owner = await User.findById(req.user.id);
+    const owner = await User.findById(userId);
     const hashTags = await photo.getHashTags();
 
     res.status(200);

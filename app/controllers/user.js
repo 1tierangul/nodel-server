@@ -23,9 +23,11 @@ router.post('/', async (req, res) => {
 });
 
 // Check auth
-router.get('/auth', ensureAuth, (req, res) => {
+router.get('/auth', ensureAuth, async (req, res) => {
+    const user = await req.session.getUser();
+
     res.status(200);
-    res.end();
+    res.send(user.getPublicData());
 });
 
 // Login
@@ -47,18 +49,20 @@ router.post('/auth', async (req, res) => {
         return;
     }
 
-    const token = await user.makeToken();
+    if (req.session.isAuthorized()) {
+        req.session.unauthorize();
+    }
+
+    req.session.authorize(user);
 
     res.status(200);
-    res.send({ token });
+    res.send(user.getPublicData());
 });
 
 // Logout
 router.delete('/auth', ensureAuth, async (req, res) => {
-    const userId = req.user.id;
-
-    await User.removeToken(userId);
-
+    req.session.unauthorize();
+    req.session.destory();
     res.status(200);
     res.end();
 });
